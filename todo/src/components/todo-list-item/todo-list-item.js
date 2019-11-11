@@ -1,33 +1,85 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import './todo-list-item.css';
 
-const TodoListItem = ({ label, important = false }) => {
 
-  const style = {
-    color: important ? 'steelblue' : 'black',
-    fontWeight: important ? 'bold' : 'normal'
+export default class TodoListItem extends Component {
+
+  // ___New standard___
+
+
+  state = {
+    done: false,
+    important: false,
   };
 
-  return (
-    <span className="todo-list-item">
-      <span
-        className="todo-list-item-label"
-        style={style}>
-        {label}
+  onLabelClick = () => {
+    this.setState(({ done }) => {
+      return {
+        done: !done
+      }
+    });
+  };
+
+  onImportantClick = () => {
+    this.setState(({ important }) => {
+      return {
+        important: !important,
+      };
+
+    });
+  };
+
+
+  // ___Conservative method___
+
+  // constructor() {
+  //   super();
+
+  //   this.state = {
+  //     done: false
+  //   };
+
+  //   this.onLabelClick = () => {
+  //     console.log(this.props.label);
+  //   }
+  // }
+
+  render() {
+    const { label, onDeleted } = this.props;
+    const { done, important } = this.state;
+
+    let classNames = "todo-list-item";
+
+    if (done) {
+      classNames += ' done';
+    }
+
+    if (important) {
+      classNames += ' important';
+    }
+
+    return (
+      <span className={classNames}>
+        <span
+          onClick={this.onLabelClick}
+          className="todo-list-item-label">
+          {label}
+        </span>
+
+        <button type="button"
+          onClick={this.onImportantClick}
+          className="btn btn-outline-success btn-sm float-right">
+          <i className="fa fa-exclamation" />
+        </button>
+
+        <button type="button"
+          onClick={onDeleted}
+          className="btn btn-outline-danger btn-sm float-right">
+          <i className="fa fa-trash-o" />
+        </button>
       </span>
+    );
+  }
+}
 
-      <button type="button"
-        className="btn btn-outline-success btn-sm float-right">
-        <i className="fa fa-exclamation" />
-      </button>
-
-      <button type="button"
-        className="btn btn-outline-danger btn-sm float-right">
-        <i className="fa fa-trash-o" />
-      </button>
-    </span>
-  );
-};
-
-export default TodoListItem;
