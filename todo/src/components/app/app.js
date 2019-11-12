@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import AppHeader from '../app-header';
-import SearchPanel from '../search-panel';
-import TodoList from '../todo-list';
-import ItemStatusFilter from '../item-status-filter';
+import AppHeader from "../app-header";
+import SearchPanel from "../search-panel";
+import TodoList from "../todo-list";
+import ItemStatusFilter from "../item-status-filter";
+import ItemAddForm from "../item-add-form";
 
-import './app.css';
+import "./app.css";
 
 export default class App extends Component {
-
   state = {
     todoData: [
-      { label: 'Drink Coffee', important: false, id: 1 },
-      { label: 'Make Awesome App', important: true, id: 2 },
-      { label: 'Have a lunch', important: false, id: 3 }
+      this.createTodoItem("Drink Coffee"),
+      this.createTodoItem("Learn React"),
+      this.createTodoItem("Make App")
     ]
   };
 
@@ -21,15 +21,42 @@ export default class App extends Component {
     this.setState(({ todoData }) => {
       const idx = todoData.findIndex((el) => el.id === id);
 
-      const newArray = [
-        ...todoData.slice(0, idx),
-        ...todoData.slice(idx + 1)
-      ];
+      const newArray = [...todoData.slice(0, idx), ...todoData.slice(idx + 1)];
 
       return {
         todoData: newArray
       };
     });
+  };
+
+  createTodoItem(label) {
+    return {
+      label,
+      important: false,
+      done: false,
+      id: +String(Math.random())
+        .split(".")[1]
+        .substring(0, 12)
+    };
+  }
+
+  addItem = (text) => {
+    const newItem = this.createTodoItem(text);
+
+    this.setState(({ todoData }) => {
+      const newArray = [...todoData, newItem];
+      return {
+        todoData: newArray
+      };
+    });
+  };
+
+  importantItem = (id) => {
+    console.log("Toggle Important", id);
+  };
+
+  doneItem = (id) => {
+    console.log("Toggle Done", id);
   };
 
   render() {
@@ -40,10 +67,14 @@ export default class App extends Component {
           <SearchPanel />
           <ItemStatusFilter />
         </div>
-        <TodoList todos={this.state.todoData}
-          onDeleted={this.deleteItem} />
+        <TodoList
+          todos={this.state.todoData}
+          onDeleted={this.deleteItem}
+          onToggleImportant={this.importantItem}
+          onToggleDone={this.doneItem}
+        />
+        <ItemAddForm onItemAdded={this.addItem} />
       </div>
     );
   }
-};
-
+}
