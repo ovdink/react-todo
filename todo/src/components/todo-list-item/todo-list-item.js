@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import "./todo-list-item.css";
+import './todo-list-item.css';
 
 export default class TodoListItem extends Component {
   render() {
@@ -13,14 +13,14 @@ export default class TodoListItem extends Component {
       important
     } = this.props;
 
-    let classNames = "todo-list-item";
+    let classNames = 'todo-list-item';
 
     if (done) {
-      classNames += " done";
+      classNames += ' done';
     }
 
     if (important) {
-      classNames += " important";
+      classNames += ' important';
     }
 
     return (
